@@ -1,18 +1,22 @@
+import { IsEmail } from "class-validator";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { RegisterOfficeHour } from "./registerHour";
 
 @Entity()
 export class Users extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column({ unique: true })
+  @IsEmail()
   email: string;
 
   @Column()
@@ -23,4 +27,7 @@ export class Users extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => RegisterOfficeHour, (register) => register.user)
+  register: RegisterOfficeHour[];
 }

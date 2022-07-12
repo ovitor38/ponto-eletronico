@@ -1,35 +1,39 @@
 import { Response, Request } from "express";
 import { Users } from "../entities/Users";
+const bcrypt = require("bcrypt");
 
 export const createUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  console.log(req);
-  // const emailReg = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i;
-  //const user = await Users.findOneBy({ email: email });
-  // if (!emailReg.test(email)) {
-  //   res.json({ message: "Please insert a valid e-mail" });
-  // }
-  // if (!email) {
-  //   res.json({ message: "You must insert an e-mail" });
-  // }
-  // if (password === null || password == "" || password == "") {
-  //   res.json({ message: "You must insert a password" });
-  // }
+  const emailReg = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i;
+  const userMail = await Users.findOne({
+    where: {
+      email,
+    },
+  });
 
-  // if (email === user) {
-  //   res.json({ message: "This email already been registered" });
+  if (!email) {
+    return res.json({ message: "You must insert an e-mail" });
+  }
+  if (!emailReg.test(email)) {
+    return res.json({ message: "Please insert a valid e-mail" });
+  }
+  if (password === null || password == "") {
+    return res.json({ message: "You must insert a password" });
+  }
+  // if (email === userMail.email) {
+  //   return res.json({ message: "This email already been registered" });
   // }
 
   try {
+    const encryptedPassword = await bcrypt.hash(password, 10);
     const user = new Users();
     user.email = email;
-    user.password = password;
+    user.password = encryptedPassword;
 
     await user.save();
-
-    return res.json(user);
+    res.json({ message: "email registered successfully" });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
