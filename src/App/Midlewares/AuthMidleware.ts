@@ -1,3 +1,5 @@
+import { InternalServerError } from "../../helpers";
+
 const jwt = require("jsonwebtoken");
 const config = require("../../config/auth");
 
@@ -20,5 +22,7 @@ module.exports = async (req, res, next) => {
       req.params.userId = decoded.id;
       return next();
     });
-  } catch (error) {}
+  } catch (error) {
+    throw new InternalServerError (error)
+  }
 };
