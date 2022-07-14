@@ -4,7 +4,7 @@ import loginRoutes from "./routes/login.routes";
 import registerRoutes from "./routes/register-hour.routes";
 import cors from "cors";
 
-const errorMidleware = require("./App/Midlewares/error-midleware");
+const errorMidleware = require("./App/midlewares/error-midleware");
 
 const app = express();
 

@@ -6,7 +6,7 @@ import {
   lunchOut,
 } from "../services/register-hour.service";
 
-const AuthMidleware = require("../App/Midlewares/AuthMidleware");
+const AuthMidleware = require("../App/midlewares/AuthMidleware");
 const router = Router();
 
 router.post("/check-in/", AuthMidleware, checkIn);

@@ -1,13 +1,19 @@
 import { createUser, userExists } from "../models/user.model";
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
+import { InternalServerError } from "../helpers";
 
 const userCreation = async (email: string, password: string) => {
-  const encryptedPassword = await bcrypt.hash(password, 10);
-  const userExist = await userExists(email);
-  if (userExist) return userExist;
-
-  const user = await createUser(email, encryptedPassword);
-  return user;
+  try {
+    const encryptedPassword = await bcrypt.hash(password, 10);
+    const userExist = await userExists(email);
+    if (userExist) return userExist;
+  
+    const user = await createUser(email, encryptedPassword);
+    return user;
+    
+  } catch (error) {
+    throw new InternalServerError(error.message)
+  }
 };
 
 // export const getUsers = async (req: Request, res: Response) => {

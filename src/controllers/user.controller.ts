@@ -13,7 +13,7 @@ const createUsers = async (req: Request, res: Response) => {
     if (valid) {
       throw new BadRequest("Please insert a valid e-mail");
     }
-    if (password === null || password == "") {
+    if (password === null || password === "") {
       throw new BadRequest("You must insert a password");
     }
 
