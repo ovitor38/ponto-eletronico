@@ -1,11 +1,10 @@
 import { Response, Request } from "express";
 import { Users } from "../entities/Users";
-
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("../../src/config/auth");
 
-export const login = async (req: Request, res: Response) => {
+export const userLogin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await Users.findOne({
     where: {

@@ -2,13 +2,10 @@ import { Response, Request } from "express";
 import { RegisterOfficeHour } from "../entities";
 
 export const checkIn = async (req: Request, res: Response) => {
-  const register = new RegisterOfficeHour();
-  const { id } = req.params;
-
   try {
-    console.log(req.params.userId);
+    const register = new RegisterOfficeHour();
     register.checkIn = new Date();
-    register.user_id = id;
+    register.user_id = req.params.userId;
 
     await register.save();
     return res.json({ message: "Register successfully" });

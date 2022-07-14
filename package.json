@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.12",
+    "@types/validator": "^13.7.4",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "class-validator": "^0.13.2",
@@ -14,7 +15,8 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.7"
+    "typeorm": "^0.3.7",
+    "validator": "^13.7.0"
   },
   "scripts": {
     "dev": "ts-node-dev  --transpile-only src/server.ts",
