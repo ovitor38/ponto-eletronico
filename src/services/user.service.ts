@@ -1,11 +1,11 @@
-import { createUser, userExists } from "../models/user.model";
+import { createUser, getUsers, updateUser, emailExists, idExists } from "../models/user.model";
 import bcrypt from "bcrypt";
 import { InternalServerError } from "../helpers";
 
 const userCreation = async (email: string, password: string) => {
   try {
     const encryptedPassword = await bcrypt.hash(password, 10);
-    const userExist = await userExists(email);
+    const userExist = await emailExists(email);
     if (userExist) return userExist;
   
     const user = await createUser(email, encryptedPassword);
@@ -16,16 +16,28 @@ const userCreation = async (email: string, password: string) => {
   }
 };
 
-// export const getUsers = async (req: Request, res: Response) => {
-//   try {
-//     const users = await Users.find();
-//     return res.json(users);
-//   } catch (error) {
-//     return res.status(500).json({ message: error.message });
-//   }
-// };
+const allUsers = async () => {
+  try {
+    const users = await getUsers()
+    return users
+  } catch (error) {
+    throw new InternalServerError(error.message)
+  }
+};
 
-// export const updateUser = async (req: Request, res: Response) => {
+export const userUpdate = async (id: string, email: string, password: string) => {
+  try {
+    const user = await idExists(id);
+    console.log(user)
+    const update = await updateUser(id, email, password)
+    return update  
+    
+  } catch (error) {
+    throw new InternalServerError(error.message)
+  }
+}
+  
+  
 //   try {
 //     const { id } = req.params;
 //     const user = await Users.findOneBy({ id: id });
@@ -54,4 +66,4 @@ const userCreation = async (email: string, password: string) => {
 //     return res.status(500).json({ message: error.message });
 //   }
 // };
-export { userCreation };
+export { userCreation, allUsers};

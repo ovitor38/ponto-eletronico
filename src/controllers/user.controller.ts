@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
-import { BadRequest } from "../helpers";
-import { userCreation } from "../services/user.service";
+import { BadRequest, InternalServerError } from "../helpers";
+import { allUsers, userCreation, userUpdate } from "../services/user.service";
 import { emailValidator } from "../utils/email-validator";
 
 const createUsers = async (req: Request, res: Response) => {
@@ -17,9 +17,31 @@ const createUsers = async (req: Request, res: Response) => {
       throw new BadRequest("You must insert a password");
     }
 
+  try {
     const user = await userCreation(email, password);
     return res.status(201).json(user);
-  
+    
+  } catch (error) {
+    throw new InternalServerError(error.message)    
+  }  
 };
 
-export { createUsers };
+const getUsers = async (req: Request, res: Response) => {
+  const users =  await allUsers()
+  return res.status(200).json(users);
+}
+
+const updateUser =async (req: Request, res: Response) => {
+  try {
+    const {id} = req.params
+    const { email, password } = req.body;
+    const information = await userUpdate(id, email, password)
+    return information
+    
+  } catch (error) {
+    throw new InternalServerError(error)
+  }
+  
+}
+
+export { createUsers, getUsers, updateUser};
