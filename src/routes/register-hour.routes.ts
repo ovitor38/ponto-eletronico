@@ -1,17 +1,14 @@
 import { Router } from "express";
+import { resolver } from "../App/adapters/route-adapter";
+import AuthMidleware from "../App/midlewares/AuthMidleware";
 import {
   checkIn,
-  checkOut,
-  lunchIn,
-  lunchOut,
-} from "../services/register-hour.service";
+  registerUpdate,
+} from "../controllers/register-hour.controller";
 
-const AuthMidleware = require("../App/midlewares/AuthMidleware");
 const router = Router();
 
-router.post("/check-in/", AuthMidleware, checkIn);
-router.put("/lunch-in/:idRegister", AuthMidleware, lunchIn);
-router.put("/lunch-out/:idRegister", AuthMidleware, lunchOut);
-router.put("/check-out/:idRegister", AuthMidleware, checkOut);
+router.post("/check-in", AuthMidleware, resolver(checkIn));
+router.put("/register-update", AuthMidleware, resolver(registerUpdate));
 
 export default router;

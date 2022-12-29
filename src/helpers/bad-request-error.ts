@@ -1,4 +1,4 @@
-export class BadRequest extends Error {
+export class BadRequestError extends Error {
   statusCode: number;
   constructor(msg: string) {
     super(msg);

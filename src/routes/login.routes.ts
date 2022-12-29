@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { userLogin } from "../services/login.service";
+import { resolver } from "../App/adapters/route-adapter";
+import { login } from "../controllers/login.controller";
 
 const router = Router();
 
-router.get("/login", userLogin);
+router.get("/login", resolver(login));
 
 export default router;

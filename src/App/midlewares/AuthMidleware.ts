@@ -1,9 +1,9 @@
 import { InternalServerError } from "../../helpers";
 
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 const config = require("../../config/auth");
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
   const auth = req.headers.authorization;
 
   if (!auth) {
@@ -23,6 +23,6 @@ module.exports = async (req, res, next) => {
       return next();
     });
   } catch (error) {
-    throw new InternalServerError (error)
+    throw new InternalServerError(error);
   }
 };

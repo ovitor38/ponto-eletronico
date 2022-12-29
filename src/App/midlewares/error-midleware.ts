@@ -1,4 +1,4 @@
-module.exports = (error, req, res, next) => {
+export default (error, req, res, next) => {
   if (error && error.statusCode) {
     res.status(error.statusCode).json({
       statusCode: error.statusCode,

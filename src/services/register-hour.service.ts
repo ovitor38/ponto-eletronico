@@ -1,83 +1,20 @@
-import { Response, Request } from "express";
-import { RegisterOfficeHour } from "../entities";
+import { checkIn, checkOut, lunchIn, lunchOut } from "../models/register-hour";
 
-export const checkIn = async (req: Request, res: Response) => {
-  try {
-    const register = new RegisterOfficeHour();
-    register.checkIn = new Date();
-    register.user_id = req.params.userId;
-
-    await register.save();
-    return res.json({ message: "Register successfully" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-export const lunchIn = async (req: Request, res: Response) => {
-  try {
-    const { idRegister } = req.params;
-    const registerId = await RegisterOfficeHour.findOneBy({
-      register_id: idRegister,
-    });
-
-    if (!registerId) {
-      return res.status(404).json({ message: "Register does not found" });
-    }
-
-    await RegisterOfficeHour.update(
-      { register_id: idRegister },
-      {
-        lunchIn: new Date(),
-      }
-    );
-    return res.status(200).json({ message: "Lunch-in register sucefully" });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
+export const registerCheckIn = async (id: string) => {
+  const registerIn = await checkIn(id);
+  return registerIn;
 };
 
-export const lunchOut = async (req: Request, res: Response) => {
-  try {
-    const { idRegister } = req.params;
-    const registerId = await RegisterOfficeHour.findOneBy({
-      register_id: idRegister,
-    });
-    if (!registerId) {
-      return res.status(404).json({ message: "Register does not found" });
-    }
-
-    await RegisterOfficeHour.update(
-      { register_id: idRegister },
-      {
-        lunchOut: new Date(),
-      }
-    );
-
-    return res.status(200).json({ message: "Lunch-out register sucefully" });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
+export const lunchInRegister = async (register_id: string) => {
+  const lInRegister = await lunchIn(register_id);
+  return lInRegister;
 };
 
-export const checkOut = async (req: Request, res: Response) => {
-  try {
-    const { idRegister } = req.params;
-    const registerId = await RegisterOfficeHour.findOneBy({
-      register_id: idRegister,
-    });
-    if (!registerId) {
-      return res.status(404).json({ message: "Register does not found" });
-    }
-
-    await RegisterOfficeHour.update(
-      { register_id: idRegister },
-      {
-        checkOut: new Date(),
-      }
-    );
-
-    return res.status(200).json({ message: "Check out register Sucefully" });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
+export const lunchOutRegister = async (register_id: string) => {
+  const lOutRegister = await lunchOut(register_id);
+  return lOutRegister;
+};
+export const checkOutRegister = async (register_id: string) => {
+  const registerOut = await checkOut(register_id);
+  return registerOut;
 };

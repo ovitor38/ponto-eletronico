@@ -1,34 +1,23 @@
-import { Response, Request } from "express";
-import { Users } from "../entities/Users";
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import { BadRequestError } from "../helpers";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { findUser } from "../models/login.model";
 const config = require("../../src/config/auth");
 
-export const userLogin = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  const user = await Users.findOne({
-    where: {
-      email,
-    },
-  });
+export const userLogin = async (email: string, password: string) => {
+  const user = await findUser(email);
 
-  try {
-    if (!user) {
-      return res.status(400).json({ messsage: "User not found" });
-    }
-
-    if (!(await bcrypt.compare(password, user.password))) {
-      return res
-        .status(400)
-        .json({ message: "email and/or password do not match" });
-    }
-
-    return res.status(200).json({
-      token: jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: config.expireIn,
-      }),
-    });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
+  if (!user) {
+    throw new BadRequestError("User not found");
   }
+
+  if (!(await bcrypt.compare(password, user.password))) {
+    throw new BadRequestError("email and / or password do not match");
+  }
+
+  return {
+    token: jwt.sign({ id: user.id }, config.secret, {
+      expiresIn: config.expireIn,
+    }),
+  };
 };

@@ -1,2 +1,2 @@
-export { Users } from "./Users";
-export { RegisterOfficeHour } from "./registerHour";
+export * from "./Users";
+export * from "./registerHour";
